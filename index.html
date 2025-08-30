@@ -1,273 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holiday Spending Tracker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holiday Spending Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f7f7;
+    }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin: 20px 0;
-        }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin: 20px 0;
+    }
 
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            box-sizing: border-box;
-        }
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+    }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
 
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
 
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            text-align: center;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+      box-sizing: border-box;
+    }
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
+    .btn:hover {
+      background-color: #0056b3;
+    }
 
-        .alert {
-            margin-top: 20px;
-            padding: 10px;
-            border-radius: 4px;
-            font-weight: bold;
-            box-sizing: border-box;
-        }
+    .alert {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      box-sizing: border-box;
+    }
 
-        .alert.success {
-            background-color: #d4edda;
-            color: #155724;
-        }
+    .alert.success {
+      background-color: #d4edda;
+      color: #155724;
+    }
 
-        .alert.error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
+    .alert.error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
 
-        .expense-list {
-            margin-top: 20px;
-        }
+    .expense-list {
+      margin-top: 20px;
+    }
 
-        .expense-list ul {
-            list-style: none;
-            padding: 0;
-        }
+    .expense-list ul {
+      list-style: none;
+      padding: 0;
+    }
 
-        .expense-list li {
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            box-sizing: border-box;
-        }
+    .expense-list li {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      box-sizing: border-box;
+    }
 
-        .expense-list li:last-child {
-            border-bottom: none;
-        }
+    .expense-list li:last-child {
+      border-bottom: none;
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
+    /* New styles for config row */
+    .config-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
 
-            h1 {
-                font-size: 1.5em;
-            }
+    .config-row .form-group {
+      flex: 1;
+    }
 
-            .btn {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-    </style>
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 8px;
+      }
+
+      .config-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Holiday Spending Tracker</h1>
+  <div class="container">
+    <h1>Holiday Spending Tracker</h1>
 
-        <!-- Configurable variables -->
-        <div class="form-group">
-            <label for="currency-symbol">Default Currency Symbol:</label>
-            <input type="text" id="currency-symbol" value="€">
-        </div>
-        <div class="form-group">
-            <label for="conversion-rate">Conversion Rate:</label>
-            <input type="number" id="conversion-rate" value="1.1" step="0.01">
-        </div>
-        <div class="form-group">
-            <label for="converted-symbol">Converted Currency Symbol:</label>
-            <input type="text" id="converted-symbol" value="$">
-        </div>
-
-        <div class="form-group">
-            <label for="budget">Set Your Budget:</label>
-            <input type="number" id="budget" placeholder="Enter your budget">
-        </div>
-        <div class="form-group">
-            <label for="expense-name">Expense Name:</label>
-            <input type="text" id="expense-name" placeholder="Enter expense name">
-        </div>
-        <div class="form-group">
-            <label for="expense-amount">Expense Amount:</label>
-            <input type="number" id="expense-amount" placeholder="Enter expense amount">
-        </div>
-        <button class="btn" onclick="addExpense()">Add Expense</button>
-        <button class="btn" style="background-color: #dc3545;" onclick="resetData()">Reset Data</button>
-
-        <div id="message" class="alert" style="display: none;"></div>
-        <div class="expense-list">
-            <h2>Expenses:</h2>
-            <ul id="expenses"></ul>
-        </div>
+    <!-- Currency & Conversion Settings in one row -->
+    <div class="config-row">
+      <div class="form-group">
+        <label for="currency-symbol">Default Currency Symbol:</label>
+        <input type="text" id="currency-symbol" value="€">
+      </div>
+      <div class="form-group">
+        <label for="conversion-rate">Conversion Rate:</label>
+        <input type="number" id="conversion-rate" value="1.1" step="0.01">
+      </div>
+      <div class="form-group">
+        <label for="converted-symbol">Converted Currency Symbol:</label>
+        <input type="text" id="converted-symbol" value="$">
+      </div>
     </div>
 
-    <script>
-        let budget = 0;
-        let totalSpent = 0;
-        let expenses = [];
+    <div class="form-group">
+      <label for="budget">Set Your Budget:</label>
+      <input type="number" id="budget" placeholder="Enter your budget">
+    </div>
+    <div class="form-group">
+      <label for="expense-name">Expense Name:</label>
+      <input type="text" id="expense-name" placeholder="Enter expense name">
+    </div>
+    <div class="form-group">
+      <label for="expense-amount">Expense Amount:</label>
+      <input type="number" id="expense-amount" placeholder="Enter expense amount">
+    </div>
+    <button class="btn" onclick="addExpense()">Add Expense</button>
+    <button class="btn" style="margin-top:10px;background-color:#dc3545;" onclick="resetData()">Reset Data</button>
 
-        function loadData() {
-            const savedData = JSON.parse(localStorage.getItem('spendingTracker'));
-            if (savedData) {
-                budget = savedData.budget;
-                totalSpent = savedData.totalSpent;
-                expenses = savedData.expenses || [];
+    <div id="message" class="alert" style="display: none;"></div>
+    <div class="expense-list">
+      <h2>Expenses:</h2>
+      <ul id="expenses"></ul>
+    </div>
+  </div>
 
-                document.getElementById('budget').value = budget;
-                document.getElementById('budget').disabled = budget > 0;
+  <script>
+    let budget = 0;
+    let totalSpent = 0;
+    let expenses = [];
 
-                renderExpenses();
-                updateMessage(`Remaining budget: ${getCurrencySymbol()}${(budget - totalSpent).toFixed(2)}`, 'success');
-            }
-        }
+    function updateMessage(message, type) {
+      const messageDiv = document.getElementById('message');
+      messageDiv.textContent = message;
+      messageDiv.className = `alert ${type}`;
+      messageDiv.style.display = 'block';
+    }
 
-        function saveData() {
-            localStorage.setItem('spendingTracker', JSON.stringify({
-                budget,
-                totalSpent,
-                expenses
-            }));
-        }
+    function saveData() {
+      localStorage.setItem('budget', budget);
+      localStorage.setItem('totalSpent', totalSpent);
+      localStorage.setItem('expenses', JSON.stringify(expenses));
+      localStorage.setItem('currencySymbol', document.getElementById('currency-symbol').value);
+      localStorage.setItem('conversionRate', document.getElementById('conversion-rate').value);
+      localStorage.setItem('convertedSymbol', document.getElementById('converted-symbol').value);
+    }
 
-        function resetData() {
-            localStorage.removeItem('spendingTracker');
-            budget = 0;
-            totalSpent = 0;
-            expenses = [];
-            document.getElementById('budget').disabled = false;
-            document.getElementById('budget').value = '';
-            document.getElementById('expenses').innerHTML = '';
-            document.getElementById('message').style.display = 'none';
-        }
+    function loadData() {
+      if (localStorage.getItem('budget')) {
+        budget = parseFloat(localStorage.getItem('budget'));
+        document.getElementById('budget').value = budget;
+      }
+      if (localStorage.getItem('totalSpent')) {
+        totalSpent = parseFloat(localStorage.getItem('totalSpent'));
+      }
+      if (localStorage.getItem('expenses')) {
+        expenses = JSON.parse(localStorage.getItem('expenses'));
+        renderExpenses();
+      }
+      if (localStorage.getItem('currencySymbol')) {
+        document.getElementById('currency-symbol').value = localStorage.getItem('currencySymbol');
+      }
+      if (localStorage.getItem('conversionRate')) {
+        document.getElementById('conversion-rate').value = localStorage.getItem('conversionRate');
+      }
+      if (localStorage.getItem('convertedSymbol')) {
+        document.getElementById('converted-symbol').value = localStorage.getItem('convertedSymbol');
+      }
+    }
 
-        function getCurrencySymbol() {
-            return document.getElementById('currency-symbol').value || '$';
-        }
+    function addExpense() {
+      const budgetInput = document.getElementById('budget');
+      const expenseNameInput = document.getElementById('expense-name');
+      const expenseAmountInput = document.getElementById('expense-amount');
+      const currencySymbol = document.getElementById('currency-symbol').value;
+      const conversionRate = parseFloat(document.getElementById('conversion-rate').value);
+      const convertedSymbol = document.getElementById('converted-symbol').value;
 
-        function getConvertedSymbol() {
-            return document.getElementById('converted-symbol').value || '';
-        }
+      if (budgetInput.value) {
+        budget = parseFloat(budgetInput.value);
+      }
 
-        function getConversionRate() {
-            return parseFloat(document.getElementById('conversion-rate').value) || 1;
-        }
+      const expenseName = expenseNameInput.value.trim();
+      const expenseAmount = parseFloat(expenseAmountInput.value);
 
-        function updateMessage(message, type) {
-            const messageDiv = document.getElementById('message');
-            messageDiv.textContent = message;
-            messageDiv.className = `alert ${type}`;
-            messageDiv.style.display = 'block';
-        }
+      if (!expenseName || isNaN(expenseAmount) || expenseAmount <= 0) {
+        updateMessage('Please enter a valid expense name and amount.', 'error');
+        return;
+      }
 
-        function addExpense() {
-            const budgetInput = document.getElementById('budget');
-            const expenseNameInput = document.getElementById('expense-name');
-            const expenseAmountInput = document.getElementById('expense-amount');
+      if (totalSpent + expenseAmount > budget) {
+        updateMessage('You have exceeded your budget!', 'error');
+        return;
+      }
 
-            if (budgetInput.value) {
-                budget = parseFloat(budgetInput.value);
-                budgetInput.disabled = true;
-            }
+      totalSpent += expenseAmount;
+      const convertedAmount = expenseAmount * conversionRate;
 
-            const expenseName = expenseNameInput.value.trim();
-            const expenseAmount = parseFloat(expenseAmountInput.value);
+      expenses.push({ name: expenseName, amount: expenseAmount, converted: convertedAmount });
 
-            if (!expenseName || isNaN(expenseAmount) || expenseAmount <= 0) {
-                updateMessage('Please enter a valid expense name and amount.', 'error');
-                return;
-            }
+      renderExpenses();
 
-            if (totalSpent + expenseAmount > budget) {
-                updateMessage('You have exceeded your budget!', 'error');
-                return;
-            }
+      updateMessage(
+        `Expense added! Remaining budget: ${currencySymbol}${(budget - totalSpent).toFixed(2)}`,
+        'success'
+      );
 
-            totalSpent += expenseAmount;
+      expenseNameInput.value = '';
+      expenseAmountInput.value = '';
+      saveData();
+    }
 
-            const convertedAmount = expenseAmount * getConversionRate();
+    function renderExpenses() {
+      const expenseList = document.getElementById('expenses');
+      expenseList.innerHTML = '';
+      const currencySymbol = document.getElementById('currency-symbol').value;
+      const conversionRate = parseFloat(document.getElementById('conversion-rate').value);
+      const convertedSymbol = document.getElementById('converted-symbol').value;
 
-            expenses.push({ name: expenseName, amount: expenseAmount });
-            saveData();
+      expenses.forEach(exp => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${exp.name}: ${currencySymbol}${exp.amount.toFixed(2)} (${convertedSymbol}${(exp.amount * conversionRate).toFixed(2)})`;
+        expenseList.appendChild(listItem);
+      });
+    }
 
-            const expenseList = document.getElementById('expenses');
-            const listItem = document.createElement('li');
-            listItem.textContent = `${expenseName}: ${getCurrencySymbol()}${expenseAmount.toFixed(2)} (${getConvertedSymbol()}${convertedAmount.toFixed(2)})`;
-            expenseList.appendChild(listItem);
+    function resetData() {
+      budget = 0;
+      totalSpent = 0;
+      expenses = [];
+      localStorage.clear();
+      document.getElementById('budget').value = '';
+      document.getElementById('expense-name').value = '';
+      document.getElementById('expense-amount').value = '';
+      document.getElementById('expenses').innerHTML = '';
+      document.getElementById('currency-symbol').value = '€';
+      document.getElementById('conversion-rate').value = '1.1';
+      document.getElementById('converted-symbol').value = '$';
+      updateMessage('Data has been reset.', 'success');
+    }
 
-            updateMessage(`Expense added! Remaining budget: ${getCurrencySymbol()}${(budget - totalSpent).toFixed(2)}`, 'success');
-
-            expenseNameInput.value = '';
-            expenseAmountInput.value = '';
-        }
-
-        function renderExpenses() {
-            const expenseList = document.getElementById('expenses');
-            expenseList.innerHTML = '';
-            expenses.forEach(exp => {
-                const convertedAmount = exp.amount * getConversionRate();
-                const listItem = document.createElement('li');
-                listItem.textContent = `${exp.name}: ${getCurrencySymbol()}${exp.amount.toFixed(2)} (${getConvertedSymbol()}${convertedAmount.toFixed(2)})`;
-                expenseList.appendChild(listItem);
-            });
-        }
-
-        window.onload = loadData;
-    </script>
+    window.onload = loadData;
+  </script>
 </body>
 </html>

@@ -57,6 +57,7 @@
             cursor: pointer;
             text-align: center;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .btn:hover {
@@ -119,6 +120,21 @@
 <body>
     <div class="container">
         <h1>Holiday Spending Tracker</h1>
+
+        <!-- Configurable variables -->
+        <div class="form-group">
+            <label for="currency-symbol">Default Currency Symbol:</label>
+            <input type="text" id="currency-symbol" value="€">
+        </div>
+        <div class="form-group">
+            <label for="conversion-rate">Conversion Rate:</label>
+            <input type="number" id="conversion-rate" value="1.1" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="converted-symbol">Converted Currency Symbol:</label>
+            <input type="text" id="converted-symbol" value="$">
+        </div>
+
         <div class="form-group">
             <label for="budget">Set Your Budget:</label>
             <input type="number" id="budget" placeholder="Enter your budget">
@@ -133,6 +149,7 @@
         </div>
         <button class="btn" onclick="addExpense()">Add Expense</button>
         <button class="btn" style="background-color: #dc3545;" onclick="resetData()">Reset Data</button>
+
         <div id="message" class="alert" style="display: none;"></div>
         <div class="expense-list">
             <h2>Expenses:</h2>
@@ -143,40 +160,59 @@
     <script>
         let budget = 0;
         let totalSpent = 0;
+        let expenses = [];
 
-        // Load saved data from localStorage
-        window.onload = function () {
-            const savedBudget = localStorage.getItem('budget');
-            const savedTotalSpent = localStorage.getItem('totalSpent');
-            const savedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
+        function loadData() {
+            const savedData = JSON.parse(localStorage.getItem('spendingTracker'));
+            if (savedData) {
+                budget = savedData.budget;
+                totalSpent = savedData.totalSpent;
+                expenses = savedData.expenses || [];
 
-            if (savedBudget) {
-                budget = parseFloat(savedBudget);
                 document.getElementById('budget').value = budget;
-                document.getElementById('budget').disabled = true;
-            }
+                document.getElementById('budget').disabled = budget > 0;
 
-            if (savedTotalSpent) {
-                totalSpent = parseFloat(savedTotalSpent);
+                renderExpenses();
+                updateMessage(`Remaining budget: ${getCurrencySymbol()}${(budget - totalSpent).toFixed(2)}`, 'success');
             }
+        }
 
-            savedExpenses.forEach(expense => {
-                addExpenseToList(expense.name, expense.amount);
-            });
-        };
+        function saveData() {
+            localStorage.setItem('spendingTracker', JSON.stringify({
+                budget,
+                totalSpent,
+                expenses
+            }));
+        }
+
+        function resetData() {
+            localStorage.removeItem('spendingTracker');
+            budget = 0;
+            totalSpent = 0;
+            expenses = [];
+            document.getElementById('budget').disabled = false;
+            document.getElementById('budget').value = '';
+            document.getElementById('expenses').innerHTML = '';
+            document.getElementById('message').style.display = 'none';
+        }
+
+        function getCurrencySymbol() {
+            return document.getElementById('currency-symbol').value || '$';
+        }
+
+        function getConvertedSymbol() {
+            return document.getElementById('converted-symbol').value || '';
+        }
+
+        function getConversionRate() {
+            return parseFloat(document.getElementById('conversion-rate').value) || 1;
+        }
 
         function updateMessage(message, type) {
             const messageDiv = document.getElementById('message');
             messageDiv.textContent = message;
             messageDiv.className = `alert ${type}`;
             messageDiv.style.display = 'block';
-        }
-
-        function addExpenseToList(name, amount) {
-            const expenseList = document.getElementById('expenses');
-            const listItem = document.createElement('li');
-            listItem.textContent = `${name}: $${amount.toFixed(2)}`;
-            expenseList.appendChild(listItem);
         }
 
         function addExpense() {
@@ -186,7 +222,6 @@
 
             if (budgetInput.value) {
                 budget = parseFloat(budgetInput.value);
-                localStorage.setItem('budget', budget);
                 budgetInput.disabled = true;
             }
 
@@ -204,33 +239,35 @@
             }
 
             totalSpent += expenseAmount;
-            localStorage.setItem('totalSpent', totalSpent);
 
-            addExpenseToList(expenseName, expenseAmount);
+            const convertedAmount = expenseAmount * getConversionRate();
 
-            const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
             expenses.push({ name: expenseName, amount: expenseAmount });
-            localStorage.setItem('expenses', JSON.stringify(expenses));
+            saveData();
 
-            updateMessage(`Expense added! Remaining budget: $${(budget - totalSpent).toFixed(2)}`, 'success');
+            const expenseList = document.getElementById('expenses');
+            const listItem = document.createElement('li');
+            listItem.textContent = `${expenseName}: ${getCurrencySymbol()}${expenseAmount.toFixed(2)} (${getConvertedSymbol()}${convertedAmount.toFixed(2)})`;
+            expenseList.appendChild(listItem);
+
+            updateMessage(`Expense added! Remaining budget: ${getCurrencySymbol()}${(budget - totalSpent).toFixed(2)}`, 'success');
 
             expenseNameInput.value = '';
             expenseAmountInput.value = '';
         }
 
-        function resetData() {
-            localStorage.clear();
-            budget = 0;
-            totalSpent = 0;
-
-            document.getElementById('budget').value = '';
-            document.getElementById('budget').disabled = false;
-            document.getElementById('expense-name').value = '';
-            document.getElementById('expense-amount').value = '';
-            document.getElementById('expenses').innerHTML = '';
-
-            updateMessage('Data has been reset.', 'success');
+        function renderExpenses() {
+            const expenseList = document.getElementById('expenses');
+            expenseList.innerHTML = '';
+            expenses.forEach(exp => {
+                const convertedAmount = exp.amount * getConversionRate();
+                const listItem = document.createElement('li');
+                listItem.textContent = `${exp.name}: ${getCurrencySymbol()}${exp.amount.toFixed(2)} (${getConvertedSymbol()}${convertedAmount.toFixed(2)})`;
+                expenseList.appendChild(listItem);
+            });
         }
+
+        window.onload = loadData;
     </script>
 </body>
 </html>
